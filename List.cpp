@@ -1,19 +1,31 @@
 #include "List.h"
 
+
 template<typename T>
-inline List<T>::List()
+inline List<T>::List() //default constructor
 {
 	this->_head = nullptr;
 }
 
 template<typename T>
-inline List<T>::List(const List<T>& rh_list)
+inline List<T>::List(const List<T>& rh_list) //copy constructor
 {
+	//if the right-hand list is empty, return an empty list
 	if (!rh_list._head)
 		return;
+
+	//initialize this->head
 	this->_head = std::make_shared<Node<T>>();
+
+	//copy the right-hand list->head
 	auto copy_node = rh_list._head;
+
+	//get data of the right-hand list's first node
 	this->_head->_data = copy_node->_data;
+
+	//travel through the copy list and use the push back function
+	//to copy data to the list
+	//ignore the fisrt node since it was copied
 	copy_node = copy_node->_next;
 	while (copy_node)
 	{
@@ -23,9 +35,9 @@ inline List<T>::List(const List<T>& rh_list)
 }
 
 template<typename T>
-List<T>::List(const int& length, const T& value_of_each)
+List<T>::List(const int& length, const T& value_of_each)   //initialize a list with length and a default value of each element
 {
-	if (length > 0)
+	if (length > 0)	
 		for (int i = 0; i < length; i++)
 			this->push_back(value_of_each);
 }
@@ -33,8 +45,13 @@ List<T>::List(const int& length, const T& value_of_each)
 template<typename T>
 inline std::ostream& operator<<(std::ostream& os, const List<T>& output_list)
 {
+	//start at the beginning of the list
 	auto temp_node = output_list._head;
 	os << "[";
+
+	//the reason for this loop condition is because I want to stop at the node
+	//right before the last node so that I do not wnat to print an additional 
+	//comma at the end
 	while (temp_node->_next->_next)
 	{
 		os << temp_node->_data << ", ";
